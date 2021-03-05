@@ -4,7 +4,7 @@
 仅支持chrome，后续有需要再加入兼容
 ```
 const _select = new Select({ 
-    cancel : false,     //再次选中是否可以取消, 
+    cancel : false,     // 再次选中是否可以取消, 
     dom : null,         // 必传 。传入的dom，容器，占位元素
     limit : 10,         //  最大同时存在的数量
     speed : 2,          // 一次滚动下标的增量 可以改为增量值，以此计算下标更流畅些
