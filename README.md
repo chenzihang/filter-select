@@ -16,7 +16,6 @@ const _select = new Select({
     key : 'name',       // 显示键
     val : 'value',      // value键
     placeholder : '请选择', 
-    selected : new Map(), 
     multiple : false,   // 多选 
 })
 
