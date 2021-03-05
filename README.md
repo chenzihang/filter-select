@@ -1,6 +1,7 @@
 # filter-select
 针对大数据量的select优化，支持单选，多选，模糊搜索，多关键词搜索 <br/>
-vue等工程内使用需手动包装，以下参数皆为默认值，dom必传，通过getSelected获取value，update更新数据<br/>
+方便拓展使用原生写的，不依赖任何库，vue等工程内使用需手动包装，以下参数皆为默认值，dom必传，通过getSelected获取value，update更新数据<br/>
+仅支持chrome，后续有需要再加入兼容
 ```
 const _select = new Select({ 
     cancel : false, //再次选中是否可以取消, 
