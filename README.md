@@ -1,7 +1,8 @@
 # filter-select
 针对大数据量的select优化，支持单选，多选，模糊搜索，多关键词搜索 <br/>
 vue等工程内使用需手动包装，通过getSelected获取value，update更新数据<br/>
-```const _select = new Select({ 
+```
+const _select = new Select({ 
     cancel : false, // //再次选中是否可以取消, 
     dom : null,// 传入的dom，容器，占位元素
     limit : 10, //  最大同时存在的数量
@@ -20,4 +21,5 @@ vue等工程内使用需手动包装，通过getSelected获取value，update更�
 
 _select.getSelected() // 获取value
 _select.update(value) // 更新value
+
 
