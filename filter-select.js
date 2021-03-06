@@ -15,8 +15,6 @@ class Select{
     placeholder = '请选择';
     selected = new Map();// 对外暴露的已选内容
     multiple = false;
-    // 默认选中
-    // 是否开启多选
     // 禁用 全局禁用和指定选项禁用，全局禁用时外壳与内部选项都置灰，可点开box，选项无法选择
     // 是否开启清空按钮
     // 键盘操作上下 
