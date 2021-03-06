@@ -15,6 +15,7 @@ class Select{
     placeholder = '请选择';
     selected = new Map();// 对外暴露的已选内容
     multiple = false;
+    filter = null; //自定义匹配规则
     // 禁用 全局禁用和指定选项禁用，全局禁用时外壳与内部选项都置灰，可点开box，选项无法选择
     // 是否开启清空按钮
     // 键盘操作上下 
@@ -237,6 +238,7 @@ class Select{
     calcBar() { // 小于30条的时候加上过度动画
         this.bar.style.height = `${(this.limit / this.data.length * this.box_content.clientHeight).toFixed(2)}px `;
         this.bar.style.minHeight = `5px`;
+        this.bar_offset = this.box_content.clientHeight - (parseInt(this.bar.style.height) < 5 ? 5 : parseInt(this.bar.style.height));
     }
     calcBarOffset() { // 计算滚动条位置
         this.bar.style.top =
@@ -247,7 +249,6 @@ class Select{
     calcBase() { // 计算基础值
         this.base_max_num = this.data.length - this.limit;
         this.base_num = this.data.length > this.limit ? this.base_max_num : 0;
-        this.bar_offset = this.box_content.clientHeight - (parseInt(this.bar.style.height) < 5 ? 5 : parseInt(this.bar.style.height));
     }
     on() {
         // document的绑定事件，对于元素被其他行为移除之类的情况 处理掉全局事件防止干扰,例如v-if、 路由切换之类的
@@ -277,9 +278,10 @@ class Select{
     getSelected(){
         return Array.from(this.selected.values())
     }
-    filterData(val) {
+    filterData(val,ev) {
         let data = this.option;
-        val.map(v => data = data.filter(item => (this.ic ? item[this.key] : (item[this.key]+'').toLowerCase()).includes(v)))
+        let fn = this.filter || (o => (this.ic ? o.item[this.key] : (o.item[this.key]+'').toLowerCase()).includes(o.text))
+        val.map(text => data = data.filter((item,index) => fn({item,text,ev,index,data})))
         return data;
     }
     placeDetails(){
@@ -305,7 +307,7 @@ class Select{
     }
     setInputVal(){
         const selected = this.getSelected();
-        this.input.value = selected[0]?selected[0][this.key]:''
+        this.input.value = (this.multiple || !selected[0])?'':selected[0][this.key]
     }
     copyText(txt) {//文本复制
         const $textarea = document.createElement('textarea');
@@ -323,26 +325,25 @@ class Select{
             this.input.value = '';
         }else{
             style.animationName = 'box-none';
-            !this.multiple && this.setInputVal()
+            this.setInputVal()
         }
     }
     add() { // 绑定事件
-        this.input.oninput = (p,focus) => { // 输入搜索触发
+        this.input.oninput = ev => { // 输入搜索触发
             let val = this.input.value.trim();
             val = this.ic ? [val] : [(val+'').toLowerCase()];
             this.miul && (val = val[0].replace(/\s+/g, ' ').split(' '));
-            this.data = this.filterData(val);
-            this.p = this.calcIndex(this.option, this.getSelected()[0] || this.option[0]);
-            
+            this.data = this.filterData(val,ev);
+            this.p = this.calcIndex(this.data, this.getSelected()[0] ) || 0;
+            this.calcBase();
             this.placeDetails()
             this.calcBar();
-            this.calcBase();
             this.calcBarOffset();
         }
-        this.input.onclick = ev => ev.stopPropagation()
+        this.input.onmousedown = ev => this.scroll_ing = true;// 防止拖拽选择等行为误处理
         this.input.onfocus = async (ev) => {
             await this.toggle(true)
-            this.input.oninput(this.p,true)
+            this.input.oninput()
             this.relationBox()
         }
         this.box_content.onmousewheel = ev => { //滚轮

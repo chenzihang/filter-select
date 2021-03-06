@@ -13,29 +13,33 @@
     <script type="module">
         import Select from './select.min.js';
         const _select = new Select({ 
-            cancel : false,       
-            dom : div,         
-            limit : 10,          
-            speed : 2,           
-            option : getOption(1000),         
-            suppose :  state=>{
-                return new Promise(r=>{
-                    setTimeout(()=>{
-                        r()
-                    },state?0:500)
-                })
-            }, 
-            change : (obj,value) =>{
-                console.log(obj,value);
-            },       
-            miul : false,        
-            ic : false,           
-            key : 'name',        
-            val : 'value',       
-            placeholder : '请选择', 
-            multiple : true,   
+            dom : div, 
+            option : getOption(100),
+            // cancel : false,       
+            // limit : 10,          
+            // speed : 2,           
+            // suppose :  state=>{
+            //     return new Promise(r=>{
+            //         setTimeout(()=>{
+            //             r()
+            //         },state?0:500)
+            //     })
+            // }, 
+            // change : (obj,value) =>{
+            //     console.log(obj,value);
+            // },       
+            // miul : false,        
+            // ic : false,           
+            // key : 'name',        
+            // val : 'value',       
+            // placeholder : '请选择', 
+            // multiple : false, 
+            // filter : o => {
+            //     if(!o.ev) return true;
+            //     return o.item.value.includes(o.text) 
+            // }  
         })
-        // _select.update(400,getOption(200))
+        // _select.update(40,getOption(200))
         // console.log(_select.getSelected());
         function getOption(n){
            return Array.from(Array(n)).map((val,i)=> ({name:i+'',value:i+''}))
