@@ -25,7 +25,9 @@
                     },state?0:500)
                 })
             }, 
-            change : null,       
+            change : (obj,value) =>{
+                console.log(obj,value);
+            },       
             miul : false,        
             ic : false,           
             key : 'name',        
@@ -33,7 +35,7 @@
             placeholder : '请选择', 
             multiple : true,   
         })
-        // _select.update(0,getOption(200))
+        // _select.update(400,getOption(200))
         // console.log(_select.getSelected());
         function getOption(n){
            return Array.from(Array(n)).map((val,i)=> ({name:i+'',value:i+''}))

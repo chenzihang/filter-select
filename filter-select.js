@@ -265,12 +265,12 @@ class Select{
             return `<span class="test-span"><span>${item[this.key]}</span><i class="el-tag__close el-icon-close" style="border-radius: 50%;"></i></span>`
         }).join('')
     }
-    changetValue(o){
+    changeValue(o){
         const selected = this.selected.get(o[this.val])
-        if( selected != o && !this.multiple ) this.selected.clear();
         if( selected ){
             this.cancel && this.selected.delete(o[this.val])
         }else{
+            !this.multiple && this.selected.clear();
             this.selected.set(o[this.val],o)
         }
     }
@@ -291,7 +291,7 @@ class Select{
         this.selected.clear();
         [].concat(val).map(vals => {
             const res = this.option.find(item => item[this.val] == vals); // 后续以key对option建个查询表
-            res && this.changetValue(res)
+            res && this.changeValue(res)
         })
         // this.placeDetails()
         if(this.multiple)
@@ -388,7 +388,7 @@ class Select{
             if (ev.target.localName === 'li') {
                 const index = this.calcIndex(this.box_content.children, ev.target)
                 const res = this.data.slice(this.p, this.p + this.limit)[index];
-                this.changetValue(res)
+                this.changeValue(res)
                 this.placeDetails()
                 this.multiple && this.placeSelected()
                 this.toggle(false)
