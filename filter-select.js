@@ -91,10 +91,13 @@ class Select{
                 font-size: 14px;
                 position: relative;
                 width: 100%;
-                min-width: 250px;
+                min-width: 100px;
                 background: #fff;
             }
             
+            .select-input {
+                min-width: 50px;
+            }
             .select-input-container {
                 display: flex;
                 flex-flow: wrap;
@@ -303,7 +306,7 @@ class Select{
     }
     relationBox(){ // 处理下关联的 box
         let box_all = document.querySelectorAll('.select-box');  
-        [].map.call(box_all,item => item != this.select_box && (item.style.animationName = 'box-none'));
+        [].map.call(box_all,item => item != this.select_box && item.style.animationName && (item.style.animationName = 'box-none'));
     }
     setInputVal(){
         const selected = this.getSelected();

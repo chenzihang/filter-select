@@ -6,38 +6,38 @@
     <title>Document</title>
 </head>
 <body>
-    <div style="height: 40px;width: 100px;">
+    <div style="width: 200px;display: inline-block">
         <div id="div">
         </div>
     </div>
     <script type="module">
         import Select from './select.min.js';
         const _select = new Select({ 
-            dom : div, 
-            option : getOption(100),
-            // cancel : false,       
-            // limit : 10,          
-            // speed : 2,           
-            // suppose :  state=>{
-            //     return new Promise(r=>{
-            //         setTimeout(()=>{
-            //             r()
-            //         },state?0:500)
-            //     })
-            // }, 
-            // change : (obj,value) =>{
-            //     console.log(obj,value);
-            // },       
-            // miul : false,        
-            // ic : false,           
-            // key : 'name',        
-            // val : 'value',       
-            // placeholder : '请选择', 
-            // multiple : false, 
-            // filter : o => {
-            //     if(!o.ev) return true;
-            //     return o.item.value.includes(o.text) 
-            // }  
+                dom : div, 
+                option : getOption(100),
+                // cancel : false,       
+                // limit : 10,          
+                // speed : 2,           
+                // suppose :  state=>{
+                //     return new Promise(r=>{
+                //         setTimeout(()=>{
+                //             r()
+                //         },state?0:500)
+                //     })
+                // }, 
+                // change : (obj,value) =>{
+                //     console.log(obj,value);
+                // },       
+                // miul : false,        
+                // ic : false,           
+                // key : 'name',        
+                // val : 'value',       
+                // placeholder : '请选择', 
+                // multiple : false, 
+                // filter : o => {
+                //     if(!o.ev) return true;
+                //     return o.item.value.includes(o.text) 
+                // }  
         })
         // _select.update(40,getOption(200))
         // console.log(_select.getSelected());
