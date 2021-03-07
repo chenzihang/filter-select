@@ -282,8 +282,8 @@ class Select{
         this.p = this.p > this.base_max_num ? this.base_num : (this.p < 0 ? 0 : this.p);
         this.box_content.innerHTML = this.details(this.data.slice(this.p, this.p + this.limit)).join('');
     }
-    update(val = [],option = this.option){
-        this.option = JSON.parse(JSON.stringify(option));
+    update(val = [],option){
+        option && (this.option = JSON.parse(JSON.stringify(option)));
         this.selected.clear();
         [].concat(val).map(vals => {
             const res = this.option.find(item => item[this.val] == vals); // 后续以key对option建个查询表
