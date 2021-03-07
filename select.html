@@ -16,7 +16,7 @@
     </div>
     <script type="module">
         import Select from './select.min.js';
-        new Select({ 
+        const _select = new Select({ 
             dom : div, 
             option : getOption(100),
             // cancel : true,       
@@ -47,7 +47,7 @@
             //     return o.item.value === o.text //精确匹配
             // }  
         })
-        // _select[1].update(40,getOption(200))
+        // _select.update(40,getOption(200))
         // console.log(_select.getSelected());
         function getOption(n){
            return Array.from(Array(n)).map((val,i)=> ({name:i+'',value:i+''}))
