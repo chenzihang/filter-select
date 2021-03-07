@@ -5,41 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-<body>
+<body style="height: 90vh;">
     <div style="width: 200px;display: inline-block">
         <div id="div">
         </div>
     </div>
+    <div style="width: 200px;display: inline-block">
+        <div id="div1">
+        </div>
+    </div>
     <script type="module">
         import Select from './select.min.js';
-        const _select = new Select({ 
-                dom : div, 
-                option : getOption(100),
-                // cancel : false,       
-                // limit : 10,          
-                // speed : 2,           
-                // suppose :  state=>{
-                //     return new Promise(r=>{
-                //         setTimeout(()=>{
-                //             r()
-                //         },state?0:500)
-                //     })
-                // }, 
-                // change : (obj,value) =>{
-                //     console.log(obj,value);
-                // },       
-                // miul : false,        
-                // ic : false,           
-                // key : 'name',        
-                // val : 'value',       
-                // placeholder : '请选择', 
-                // multiple : false, 
-                // filter : o => {
-                //     if(!o.ev) return true;
-                //     return o.item.value.includes(o.text) 
-                // }  
+        new Select({ 
+            dom : div, 
+            option : getOption(100),
+            // cancel : true,       
+            // limit : 10,          
+            // speed : 2,           
+            // suppose :  type => {
+            //     return new Promise(r=>{
+            //         setTimeout(()=>{
+            //             r()
+            //         },type == 'show'?0:500)
+            //     })
+            // }, 
+            // change (obj,value){
+            //     this.suppose = type => {
+            //         return new Promise(r => {
+            //             type === 'selected'?r(false):r()
+            //         })
+            //     };
+            // },       
+            // miul : false,        
+            // ic : false,           
+            // key : 'name',        
+            // val : 'value',       
+            // placeholder : '请选择', 
+            // multiple : true, 
+            // filter : o => {
+            //     if(!o.ev) return true;
+            //     return o.item.value === o.text //精确匹配
+            // }  
         })
-        // _select.update(40,getOption(200))
+        // _select[1].update(40,getOption(200))
         // console.log(_select.getSelected());
         function getOption(n){
            return Array.from(Array(n)).map((val,i)=> ({name:i+'',value:i+''}))
