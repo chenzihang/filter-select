@@ -414,7 +414,7 @@ class Select{
         })
         this.on('keydown', ev => {
             if(!this.getBoxState()) return ;
-            const n = ev.keyCode === 38?-1:1;
+            let n = ev.keyCode === 38?-1:1;
             const list = this.box_content.children;
             const hover = this.box_content.querySelector('.hover');
             if(hover && ev.keyCode == 13 ){// 回车选择
@@ -423,8 +423,8 @@ class Select{
             }
 
             if(![38,40].includes(ev.keyCode)) return;
-            let index = this.calcIndex(list, hover);
-            index = !isNaN(index)?index:-1;
+            let index = this.calcIndex(list, hover) || 0;
+            !hover && (n = 0);
             hover && hover.classList.remove('hover');
             if(!list[index + n]){
                 this.p += n
