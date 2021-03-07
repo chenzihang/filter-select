@@ -16,9 +16,10 @@ class Select{
     selected = new Map();// 对外暴露的已选内容
     multiple = false;
     filter = null; //自定义匹配规则
+    // 是否深拷贝option开关，大数据量时不对数据进行深拷贝将大幅提升初始化性能
+    // 根据option建立map表，初始化后逐渐生成，后续所有查找操作皆可通过map查找，大幅提升性能
     // 禁用 全局禁用和指定选项禁用，全局禁用时外壳与内部选项都置灰，可点开box，选项无法选择
     // 是否开启清空按钮
-    // 键盘操作上下 
     //  根据select当前位置向上或向下显示box 动态添加calss，内容为 top: 0px; transform: translate(0px, -100%);
     constructor(o) {
         Object.assign(this, o);
