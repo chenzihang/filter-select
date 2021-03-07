@@ -10,7 +10,7 @@ const _select = new Select({
     limit : 10,         //  最大同时存在的数量
     speed : 2,          // 一次滚动下标的增量 可以改为增量值，以此计算下标更流畅些
     option : [],        // 总数据
-    suppose : null,     // 下拉框显示与隐藏前执行的callback，接收state参数，true为显示，false为隐藏,支持通过promise异步操作 
+    suppose : null,     // 下拉框显示与隐藏前执行的callback，接收type参数，区分show、selected、cancel三种状态，,支持通过promise异步操作 
     change : null,      // 选中回调, 有4个入参，当前点击数据对象，当前value，当前点击的dom，当前select对象
     miul : false,       // 多关键词无序模糊匹配 空格间隔关键词
     ic : false,         // 是否区分大小写 
