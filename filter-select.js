@@ -1,12 +1,12 @@
-
 class Select{
+    copy_data = false; // 是否深拷贝option开关，大数据量时不对数据进行深拷贝将大幅提升初始化性能
     cancel = false;//再次选中是否可以取消
     dom = null;// 传入的dom，容器，占位元素
     limit = 10; //  最大同时存在的数量
     speed = 2; // 一次滚动下标的增量 可以改为增量值，以此计算下标更流畅些
     option = []; // 总数据
     suppose = null;// 下拉框显示与隐藏前执行的callback，接收state参数，true为显示，false为隐藏,支持通过promise异步操作 
-    change = null; // 选中回调, 返回值为false则当前选中行为无效，回调有3个入参，当前选择的数据对象，当前点击的dom，当前select对象
+    change = null; // 选中回调, 返回值为false则当前选中行为无效，回调有3个入参，当前value、当前对象、ev
     miul = false; // 多关键词无序模糊匹配 空格间隔关键词
     ic = false; // 是否区分大小写 
     focus_clear = false; // 获取焦点时是否清空输入框
@@ -15,15 +15,13 @@ class Select{
     placeholder = '请选择';
     selected = new Map();// 对外暴露的已选内容
     multiple = false;
-    filter = null; //自定义匹配规则
-    // 是否深拷贝option开关，大数据量时不对数据进行深拷贝将大幅提升初始化性能
+    filter = null; // 过滤回调函数，自定义匹配规则
     // 根据option建立map表，初始化后逐渐生成，后续所有查找操作皆可通过map查找，大幅提升性能
     // 禁用 全局禁用和指定选项禁用，全局禁用时外壳与内部选项都置灰，可点开box，选项无法选择
-    // 是否开启清空按钮
-    //  根据select当前位置向上或向下显示box 动态添加calss，内容为 top: 0px; transform: translate(0px, -100%);
+    // 根据select当前位置向上或向下显示box 动态添加calss，内容为 top: 0px; transform: translate(0px, -100%);
     constructor(o) {
         Object.assign(this, o);
-        this.option = JSON.parse(JSON.stringify(this.option));
+        this.option = this.copy_data?JSON.parse(JSON.stringify(this.option)):this.option;
         this.ev_listener = {}; // document事件列表
         this.p = 0; // 起始下标
         this.init();
@@ -36,7 +34,7 @@ class Select{
     }
     create(dom) {//添加基础内容dom // 滚动条不可以直接放到ul同一层，因为select-option-container还是借用了部分系统滚动，放同一层会导致滚动条被滚出去
         let div = dom || document.createElement('div');
-        div.innerHTML = `<div class="select-container"><div class="select-input-container"><div class="selected-content"></div><input class="select-input" style="border: none;background: rgba(0,0,0,0);outline: none;flex: 1;width: 0px;"type="text"placeholder="${this.placeholder}"/><span class="select-arrow"></span></div><div class="select-box"><ul class="select-box-content"></ul><div class="select-scroll"><div class="select-scroll-bar"></div></div></div>`;
+        div.innerHTML = `<div class="select-container"><div class="select-input-container"><div class="selected-content"></div><input class="select-input" style="border: none;background: rgba(0,0,0,0);outline: none;flex: 1;width: 0px;"type="text"placeholder="${this.placeholder}"/><span class="select-arrow"></span><span class="select-close"></span></div><div class="select-box"><ul class="select-box-content"></ul><div class="select-scroll"><div class="select-scroll-bar"></div></div></div>`;
         let style = document.createElement('style');
         style.id = "select-style";
         style.innerHTML =  `
@@ -56,14 +54,12 @@ class Select{
                 margin: -2px 2px 0 2px;
                 transform: scale(.8);
             }
-
             .el-icon-close:before{
                 display: block;
                 content: "x";
                 font-style: normal;
                 margin-top: -1px;
             }
-
             .selected-content {
                 display: contents;
             }
@@ -98,6 +94,12 @@ class Select{
             
             .select-input {
                 min-width: 50px;
+            }
+            .select-input-container:hover .select-arrow {
+                display:none;
+            }
+            .select-input-container:hover .select-close {
+                display:block;
             }
             .select-input-container {
                 display: flex;
@@ -190,17 +192,15 @@ class Select{
                 border-style: solid;
                 border-color: #000 transparent transparent transparent;
                 position: absolute;
-                right: 10px;
+                right: 8px;
                 top: 50%;
                 transform: translate(0px,-25%)
             }
-            
             .select-scroll {
                 display: none;
                 background: #F1F1F1;
                 width: 10px;
             }
-            
             .select-scroll-bar {
                 transition: .2s;
                 margin: 0;
@@ -208,6 +208,25 @@ class Select{
                 right: 0px;
                 background: #C1C1C1;
                 width: 10px
+            }
+            .select-close{
+                border: 1px solid #bfbcbc;
+                border-radius: 50%;
+                width: 16px;
+                height: 16px;
+                line-height: 11px;
+                display: none;
+                cursor: pointer;
+                display: none;
+                position: absolute;
+                top: 20px;
+                right: 5px;
+                transform: translate(0px,-50%);
+            }
+            .select-close:before{
+                content:"x";
+                font-size:12px;
+                font-family: cursive;
             }
         `;
         !document.querySelector('#select-style') && document.querySelector('head').appendChild(style);
@@ -218,7 +237,7 @@ class Select{
         this.bar = div.querySelector('.select-scroll-bar');
         this.box_content = div.querySelector('.select-box-content');
         this.select_box = div.querySelector('.select-box');
-        this.feign_input = div.querySelector('.feign-input');
+        this.select_close = div.querySelector('.select-close');
         return this.container;
     }
     details(o) { // 计算li的样式，后续加入禁用、action等状态
@@ -284,7 +303,7 @@ class Select{
         this.box_content.innerHTML = this.details(this.data.slice(this.p, this.p + this.limit)).join('');
     }
     update(val = [],option){
-        option && (this.option = JSON.parse(JSON.stringify(option)));
+        option && (this.option = this.copy_data?JSON.parse(JSON.stringify(option)):option);
         this.selected.clear();
         [].concat(val).map(vals => {
             const res = this.option.find(item => item[this.val] == vals); // 后续以key对option建个查询表
@@ -341,6 +360,12 @@ class Select{
             if((await this.toggle('show')) === false) return ;
             this.input.oninput()
         }
+        this.select_close.onclick = ev => {
+            this.toggle(false)
+            this.update([])
+            const selected = this.getSelected();
+            this.change && this.change(selected,selected,ev.target);
+        }
         this.box_content.onmousewheel = ev => { //滚轮
             this.bar.style.transition = '';
             this.p += parseInt(ev.wheelDelta > 0 ? -this.speed : this.speed);
@@ -395,7 +420,7 @@ class Select{
             this.placeDetails()
             this.box_content.children[index].classList.add('hover','keydown'); // 键盘事件触发的li事件，防止键盘事件冲突
             this.multiple && this.placeSelected()
-            this.change && this.change( res,this.getSelected(), ev.target ,this );
+            this.change && this.change(this.getSelected(),res,ev.target);
             this.toggle('selected');
             ev.button && this.copyText(ev.target.innerText) // 非左键选择即自动复制
         }
