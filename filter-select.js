@@ -6,7 +6,7 @@ class Select{
     speed = 2; // 一次滚动下标的增量 可以改为增量值，以此计算下标更流畅些
     option = []; // 总数据
     suppose = null;// 下拉框显示与隐藏前执行的callback，接收state参数，true为显示，false为隐藏,支持通过promise异步操作 
-    change = null; // 选中回调, 返回值为false则当前选中行为无效，回调有3个入参，当前value、被操作对象、ev
+    change = null; // 选中回调, 返回值为false则当前选中行为无效，回调有3个入参，当前value、当前对象、ev
     miul = false; // 多关键词无序模糊匹配 空格间隔关键词
     ic = false; // 是否区分大小写 
     focus_clear = false; // 获取焦点时是否清空输入框
@@ -361,10 +361,9 @@ class Select{
             this.input.oninput()
         }
         this.select_close.onclick = ev => {
-            this.toggle(false)
             const res = this.getSelected();
             this.update([])
-            this.change && this.change(this.getSelected(),res,ev.target);
+            this.change && this.change(this.getSelected(),res,ev);
         }
         this.box_content.onmousewheel = ev => { //滚轮
             this.bar.style.transition = '';
@@ -420,18 +419,19 @@ class Select{
             this.placeDetails()
             this.box_content.children[index].classList.add('hover','keydown'); // 键盘事件触发的li事件，防止键盘事件冲突
             this.multiple && this.placeSelected()
-            this.change && this.change(this.getSelected(),res,ev.target);
+            this.change && this.change(this.getSelected(),res,ev);
             this.toggle('selected');
             ev.button && this.copyText(ev.target.innerText) // 非左键选择即自动复制
         }
-        this.container.onmousedown = ev=> ev.stopPropagation();
+        this.select_box.onmousedown = ev=> ev.stopPropagation();
+        this.input.onmousedown = ev=> ev.stopPropagation();
         this.selected_content.onmousedown = async ev => {
             if (!ev.target.className.includes('el-icon-close') ) return ;
             const list = this.selected_content.querySelectorAll('.el-icon-close');
             const index = this.calcIndex(list, ev.target)
             const res = this.getSelected()[index];
             this.selected.delete(res[this.val])
-            this.placeDetails()
+            this.change && this.change(this.getSelected(),res,ev);
             this.placeSelected()
         }
         this.on('mousedown', async ev => {
