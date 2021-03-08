@@ -4,6 +4,7 @@
 仅支持chrome，后续有需要再加入兼容
 ```
 const _select = new Select({ 
+    copy_data : false,  // 是否深拷贝option
     dom : null,         // 必传 。传入的dom，容器，占位元素
     cancel : false,     // 再次选中是否可以取消, 
     filter: null,       // 筛选回调函数，开启时将覆盖原本的匹配规则，且对miul参数造成一定影响
