@@ -355,11 +355,10 @@ class Select{
             this.calcBarOffset();
         }
         this.input.onfocus = async (ev) => {// focus显示下拉列
-            const all_box = document.querySelectorAll(".select-box") // 因冒泡被阻止,防止点击其他select时造成干扰
-            all_box.forEach(el => el != this.select_box && this.getBoxState(el) && (el.style.animationName = 'box-none'))
             if((await this.toggle('show')) === false) return ;
             this.input.oninput()
         }
+        this.input.onmousedown = ev => this.ing = true;
         this.select_close.onclick = ev => {
             const res = this.getSelected();
             this.update([])
@@ -382,7 +381,7 @@ class Select{
         this.bar.onmousedown = e => { // 滚动条滑块拖拽
             let base_y = e.y;
             this.bar.style.transition = 'none';
-            this.scroll_ing = true;
+            this.ing = true;
             e.stopPropagation()
             this.on('mousemove', ev => {
                 let sy = parseInt(this.bar.style.top || 0) + (ev.y - base_y);
@@ -394,7 +393,7 @@ class Select{
                 this.placeDetails();
             })
             this.on('mouseup', ev => {
-                this.scroll_ing = false
+                this.ing = false
                 this.bar.style.transition = '';
                 document.removeEventListener('mousemove', this.ev_listener['mousemove'], false)
                 document.removeEventListener('mouseup', this.ev_listener['mouseup'], false)
@@ -424,7 +423,6 @@ class Select{
             ev.button && this.copyText(ev.target.innerText) // 非左键选择即自动复制
         }
         this.select_box.onmousedown = ev=> ev.stopPropagation();
-        this.input.onmousedown = ev=> ev.stopPropagation();
         this.selected_content.onmousedown = async ev => {
             if (!ev.target.className.includes('el-icon-close') ) return ;
             const list = this.selected_content.querySelectorAll('.el-icon-close');
@@ -435,8 +433,8 @@ class Select{
             this.placeSelected()
         }
         this.on('mousedown', async ev => {
-            this.getBoxState() && !this.scroll_ing && await this.toggle('cancel');
-            this.scroll_ing = false; // 因拖拽行为会导致误触发，所以使用scroll_ing区分下
+            this.getBoxState() && !this.ing && await this.toggle('cancel');
+            this.ing = false; // 因拖拽行为 || input点击事件会导致误触发，所以使用ing区分下
         })
         this.on('keydown', ev => {
             if(!this.getBoxState()) return ;
