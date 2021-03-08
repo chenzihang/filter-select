@@ -6,7 +6,7 @@ class Select{
     speed = 2; // 一次滚动下标的增量 可以改为增量值，以此计算下标更流畅些
     option = []; // 总数据
     suppose = null;// 下拉框显示与隐藏前执行的callback，接收state参数，true为显示，false为隐藏,支持通过promise异步操作 
-    change = null; // 选中回调, 返回值为false则当前选中行为无效，回调有3个入参，当前value、当前对象、ev
+    change = null; // 选中回调, 返回值为false则当前选中行为无效，回调有3个入参，当前value、被操作对象、ev
     miul = false; // 多关键词无序模糊匹配 空格间隔关键词
     ic = false; // 是否区分大小写 
     focus_clear = false; // 获取焦点时是否清空输入框
