@@ -362,9 +362,9 @@ class Select{
         }
         this.select_close.onclick = ev => {
             this.toggle(false)
+            const res = this.getSelected();
             this.update([])
-            const selected = this.getSelected();
-            this.change && this.change(selected,selected,ev.target);
+            this.change && this.change(this.getSelected(),res,ev.target);
         }
         this.box_content.onmousewheel = ev => { //滚轮
             this.bar.style.transition = '';
