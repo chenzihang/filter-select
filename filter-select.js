@@ -217,7 +217,7 @@ class Select{
                 line-height: 11px;
                 display: none;
                 cursor: pointer;
-                display: none;
+                text-align: center;
                 position: absolute;
                 top: 20px;
                 right: 5px;
