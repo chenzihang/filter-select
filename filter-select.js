@@ -10,8 +10,8 @@ class Select{
     miul = false; // 多关键词无序模糊匹配 空格间隔关键词
     ic = false; // 是否区分大小写 
     focus_clear = false; // 获取焦点时是否清空输入框
-    key = 'name'; // option显示值
-    val = 'value';// option具体值 也会是form_input的value
+    keys = 'name'; // option显示值
+    vals = 'value';// option具体值 也会是form_input的value
     placeholder = '请选择';
     selected = new Map();// 对外暴露的已选内容
     multiple = false;
@@ -242,7 +242,7 @@ class Select{
     }
     details(o) { // 计算li的样式，后续加入禁用、action等状态
         return o.map((item, i) => {
-            return `<li ${this.selected.has(item[this.val])? 'class="active"' : ''} title="${item[this.key]}">${item[this.key]}</li>`
+            return `<li ${this.selected.has(item[this.vals])? 'class="active"' : ''} title="${item[this.keys]}">${item[this.keys]}</li>`
         });
     }
     calcIndex(arr, o) {
@@ -277,16 +277,16 @@ class Select{
     }
     placeSelected(){
         this.selected_content.innerHTML = this.getSelected().map(item => {
-            return `<span class="test-span"><span>${item[this.key]}</span><i class="el-tag__close el-icon-close" style="border-radius: 50%;"></i></span>`
+            return `<span class="test-span"><span>${item[this.keys]}</span><i class="el-tag__close el-icon-close" style="border-radius: 50%;"></i></span>`
         }).join('')
     }
     changeValue(o){
-        const selected = this.selected.get(o[this.val])
+        const selected = this.selected.get(o[this.vals])
         if( selected ){
-            this.cancel && this.selected.delete(o[this.val])
+            this.cancel && this.selected.delete(o[this.vals])
         }else{
             !this.multiple && this.selected.clear();
-            this.selected.set(o[this.val],o)
+            this.selected.set(o[this.vals],o)
         }
     }
     getSelected(){
@@ -294,7 +294,7 @@ class Select{
     }
     filterData(val,ev) {
         let data = this.option;
-        let fn = this.filter || (o => (this.ic ? o.item[this.key] : (o.item[this.key]+'').toLowerCase()).includes(o.text))
+        let fn = this.filter || (o => (this.ic ? o.item[this.keys] : (o.item[this.keys]+'').toLowerCase()).includes(o.text))
         val.map(text => data = data.filter((item,index) => fn({item,text,ev,index,data})))
         return data;
     }
@@ -306,7 +306,7 @@ class Select{
         option && (this.option = this.copy_data?JSON.parse(JSON.stringify(option)):option);
         this.selected.clear();
         [].concat(val).map(vals => {
-            const res = this.option.find(item => item[this.val] == vals); // 后续以key对option建个查询表
+            const res = this.option.find(item => item[this.vals] == vals); // 后续以key对option建个查询表
             res && this.changeValue(res)
         })
         if(this.multiple)
@@ -316,7 +316,7 @@ class Select{
     }
     setInputVal(){
         const selected = this.getSelected();
-        this.input.value = (this.multiple || !selected[0])?'':selected[0][this.key]
+        this.input.value = (this.multiple || !selected[0])?'':selected[0][this.keys]
     }
     copyText(txt) {//文本复制
         const $textarea = document.createElement('textarea');
@@ -428,7 +428,7 @@ class Select{
             const list = this.selected_content.querySelectorAll('.el-icon-close');
             const index = this.calcIndex(list, ev.target)
             const res = this.getSelected()[index];
-            this.selected.delete(res[this.val])
+            this.selected.delete(res[this.vals])
             this.change && this.change(this.getSelected(),res,ev);
             this.placeSelected()
         }
