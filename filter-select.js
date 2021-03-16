@@ -70,8 +70,6 @@ class Select{
                 color: #909399;
                 display: inline-block;
                 border-radius: 4px;
-                // margin: 2px;
-                // padding: 2px;
                 vertical-align: middle;
                 font-size: 12px;
                 padding: 2px 0px 2px 8px;
@@ -219,7 +217,7 @@ class Select{
                 cursor: pointer;
                 text-align: center;
                 position: absolute;
-                top: 20px;
+                top: 50%;
                 right: 5px;
                 transform: translate(0px,-50%);
             }
